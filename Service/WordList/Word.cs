@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Service
 {
-	public class WordInput
+	public class InputWord
 	{
 		[JsonInclude]
 		public string Word;

@@ -12,7 +12,7 @@ namespace Service.Controllers
 	public class WordListController : ControllerBase
 	{
 		[HttpPost]
-		public IActionResult Post(WordInput Input)
+		public IActionResult Post(InputWord Input)
 		{
 			var words = ProfanityChecker.AddWord(Input.Word);
 			return words.Match<IActionResult>(
