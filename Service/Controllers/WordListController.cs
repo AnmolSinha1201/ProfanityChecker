@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Service.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class WordListController : ControllerBase
 	{
 		[HttpPost]
