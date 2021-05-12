@@ -10,9 +10,11 @@ namespace Service
 	public static class ProfanityChecker
 	{
 		public static Dictionary<string, IndividualStatistic> WordDictionary = new();
-		public static WordListStatistic OverallStat = new();
 		public static string SourceFile = "ProfaneWords.txt";
-		static object Locker = new object();
+
+		static object Locker = new();
+		static TimeSpan TotalTime = new();
+		static int TimesCalled = 0;
 
 		static ProfanityChecker()
 		{
@@ -24,17 +26,17 @@ namespace Service
 
 			WordDictionary = File.ReadAllLines(SourceFile)
 				.Where(i => !i.Trim().Equals(""))
+				.Select(i => i.ToLower())
 				.ToDictionary(k => k, v => new IndividualStatistic());
 		}
 
 		public static List<string> Check(string Sentence)
 		{
 			var foundList = new List<string>();
-			OverallStat.Frequency++;
 
 			var watch = new Stopwatch();
 			watch.Start();
-			foreach (var word in Sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+			foreach (var word in Sentence.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries))
 			{
 				if (!WordDictionary.ContainsKey(word))
 					continue;
@@ -45,7 +47,8 @@ namespace Service
 			watch.Stop();
 			lock(Locker)
 			{
-				OverallStat.TotalTime.Add(watch.Elapsed);
+				TotalTime.Add(watch.Elapsed);
+				TimesCalled++;
 			}
 
 			return foundList;

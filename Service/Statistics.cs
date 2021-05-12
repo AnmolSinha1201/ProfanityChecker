@@ -11,8 +11,8 @@ namespace Service
 
     public class OverallStatistic
     {
-        public List<string> PopularWords = new();
-        public DateTime TotalTime;
-        public int TimesCalled;
+        public List<string> PopularWords { get; set; }= new();
+        public TimeSpan TotalTime { get; set; }
+        public int TimesCalled { get; set; }
     }
 }
