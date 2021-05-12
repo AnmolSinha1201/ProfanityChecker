@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using OneOf;
+using Npgsql;
+using Dapper;
 
 namespace Service
 {
@@ -16,74 +18,107 @@ namespace Service
 		static object Locker = new();
 		static TimeSpan TotalTime = new();
 		static int TimesCalled = 0;
+		//TODO : Fix cases when conneciton string is not present
+		static string ConnectionString = Environment.GetEnvironmentVariable("PostgreSQLConnectionString");
 
-		static ProfanityChecker()
-		{
-			if (!File.Exists(SourceFile))
-			{
-				Console.WriteLine($"{SourceFile} DOES NOT EXIST");
-				return;
-			}
-
-			WordDictionary = File.ReadAllLines(SourceFile)
-				.Where(i => !i.Trim().Equals(""))
-				.Select(i => i.ToLower())
-				.ToDictionary(k => k, v => new IndividualStatistic());
-		}
-
-		public static List<string> Check(string Sentence)
+		public static OneOf<CheckResultSuccess, Failure> Check(string Sentence)
 		{
 			var foundList = new List<string>();
 
+			var preparedWords = Sentence.ToLower()
+				.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+				.Select(i => $"'{i.Prepare()}'")
+				.Aggregate((prev, current) => $"{prev}, {current}");
+			
 			var watch = new Stopwatch();
 			watch.Start();
-			foreach (var word in Sentence.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries))
+			using (var connection = new NpgsqlConnection(ConnectionString))
 			{
-				if (!WordDictionary.ContainsKey(word))
-					continue;
+				try
+				{
+					var query = $"update profanities Set frequency = frequency + 1 where word in ({preparedWords}) returning *";
+					var contains = connection.Query<ProfaneWord>(query);
 
-				WordDictionary[word].Frequency++;
-				foundList.Add(word);
+					foundList = contains.Select(i => i.Word).ToList();
+				}
+				catch (Exception ex)
+				{
+					return new Failure() { Description = ex.Message };
+				}
+				
 			}
 			watch.Stop();
+
 			lock(Locker)
 			{
 				TotalTime.Add(watch.Elapsed);
 				TimesCalled++;
 			}
-
-			return foundList;
+			return new CheckResultSuccess() { WordList = foundList, TimeTaken = watch.Elapsed };
 		}
 
-		public static OverallStatistic GetOverallStatistic()
-		=> new OverallStatistic()
+		public static OneOf<OverallStatisticSuccess, Failure> GetOverallStatistic()
 		{
-			TotalTime = TotalTime,
-			TimesCalled = TimesCalled,
-			PopularWords = WordDictionary
-				.Where(kvp => kvp.Value.Frequency != 0)
-				.OrderByDescending(kvp => kvp.Value.Frequency)
-				.Take(10)
-				.Select(kvp => kvp.Key)
-				.ToList()
-		};
+			using (var connection = new NpgsqlConnection(ConnectionString))
+			{
+				try
+				{
+					var query = $"select * from Profanities order by Frequency desc limit 10";
+					var words = connection.Query<ProfaneWord>(query);
+
+					return new OverallStatisticSuccess()
+					{
+						TotalTime = TotalTime,
+						TimesCalled = TimesCalled,
+						PopularWords = words
+							.Where(i => i.Frequency != 0)
+							.ToList()
+					};
+				}
+				catch (Exception ex)
+				{
+					return new Failure() { Description = ex.Message };
+				}
+				
+			}
+		}
 
 		public static OneOf<Successful, Failure> AddWord(string Word)
 		{
-			if (WordDictionary.ContainsKey(Word))
-				return new Failure() { Description = "Word list already has the proposed word" };
-			
-			try
+			using (var connection = new NpgsqlConnection(ConnectionString))
 			{
-				File.AppendAllLines(SourceFile, new [] { Word });
-				WordDictionary.Add(Word, new());
-			}
-			catch(Exception ex)
-			{
-				return new Failure() { Description = ex.Message };
-			}
+				try
+				{
+					var contains = connection.Query<ProfaneWord>($"select * from Profanities where Word =  '{Word.Prepare()}'");
+					if (contains.Count() > 0)
+						return new Failure() { Description = "Word list already has the proposed word" };
 
-			return new Successful() { Description = "Successfully added the proposed word" };
+					connection.Execute($"insert into Profanities(Word) values ('{Word.Prepare()}')");
+				}
+				catch (Exception ex)
+				{
+					return new Failure() { Description = ex.Message };
+				}
+
+				return new Successful() { Description = "Successfully added the proposed word" };
+			}
+		}
+
+		public static OneOf<Successful, Failure> RemoveWord(string Word)
+		{
+			using (var connection = new NpgsqlConnection(ConnectionString))
+			{
+				try
+				{
+					connection.Execute($"delete from Profanities where Word = '{Word.Prepare()}'");
+				}
+				catch (Exception ex)
+				{
+					return new Failure() { Description = ex.Message };
+				}
+
+				return new Successful() { Description = "Successfully deleted the proposed word" };
+			}
 		}
 	}
 }
