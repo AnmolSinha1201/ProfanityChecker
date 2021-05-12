@@ -60,16 +60,14 @@ namespace Service
 			{
 				try
 				{
-					var query = $"select * from Profanities order by Frequency desc limit 10";
+					var query = $"select * from Profanities where frequency != 0 order by frequency desc limit 10 ";
 					var words = connection.Query<ProfaneWord>(query);
 
 					return new OverallStatisticSuccess()
 					{
 						TotalTime = TotalTime,
 						TimesCalled = TimesCalled,
-						PopularWords = words
-							.Where(i => i.Frequency != 0)
-							.ToList()
+						PopularWords = words.ToList()
 					};
 				}
 				catch (Exception ex)
