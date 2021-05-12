@@ -50,5 +50,18 @@ namespace Service
 
 			return foundList;
 		}
+
+		public static OverallStatistic GetOverallStatistic()
+		=> new OverallStatistic()
+		{
+			TotalTime = TotalTime,
+			TimesCalled = TimesCalled,
+			PopularWords = WordDictionary
+				.Where(kvp => kvp.Value.Frequency != 0)
+				.OrderByDescending(kvp => kvp.Value.Frequency)
+				.Take(10)
+				.Select(kvp => kvp.Key)
+				.ToList()
+		};
 	}
 }

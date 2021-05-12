@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Service
 {
     public class IndividualStatistic
     {
         public int Frequency = 0;
-    }
-
-    public class WordListStatistic
-    {
-        public DateTime TotalTime;
-        public int Frequency;
     }
 
     public class OverallStatistic
