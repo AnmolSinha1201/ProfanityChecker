@@ -12,9 +12,6 @@ namespace Service
 {
 	public static class ProfanityChecker
 	{
-		public static Dictionary<string, IndividualStatistic> WordDictionary = new();
-		public static string SourceFile = "ProfaneWords.txt";
-
 		static object Locker = new();
 		static TimeSpan TotalTime = new();
 		static int TimesCalled = 0;
