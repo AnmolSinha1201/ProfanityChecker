@@ -4,15 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace Service
 {
-    public class IndividualStatistic
-    {
-        public int Frequency = 0;
-    }
+	public class IndividualStatistic
+	{
+		public int Frequency = 0;
+	}
 
-    public class OverallStatistic
-    {
-        public List<string> PopularWords { get; set; }= new();
-        public TimeSpan TotalTime { get; set; }
-        public int TimesCalled { get; set; }
-    }
+	public class ProfaneWord
+	{
+		public string Word;
+		public int Frequency;
+	}
 }
