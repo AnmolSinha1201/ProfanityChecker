@@ -20,5 +20,15 @@ namespace Service.Controllers
 				fail => BadRequest(fail.ToString())
 			);
 		}
+
+		[HttpDelete("{Input}")]
+		public IActionResult Delete(string Input)
+		{
+			var result = ProfanityChecker.RemoveWord(Input);
+			return result.Match<IActionResult>(
+				success => Ok(success.ToString()),
+				fail => BadRequest(fail.ToString())
+			);
+		}
 	}
 }
