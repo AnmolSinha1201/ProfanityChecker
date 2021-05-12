@@ -14,8 +14,11 @@ namespace Service.Controllers
 		[HttpGet]
 		public IActionResult Get()
 		{
-			var words = ProfanityChecker.GetOverallStatistic();
-			return Ok(words);
+			var result = ProfanityChecker.GetOverallStatistic();
+			return result.Match<IActionResult>(
+				success => Ok(success.ToString()),
+				fail => BadRequest(fail.ToString())
+			);
 		}
 	}
 }

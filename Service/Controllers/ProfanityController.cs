@@ -20,8 +20,11 @@ namespace Service.Controllers
 		[HttpPost]
 		public IActionResult Post(ServiceInput Input)
 		{
-			var words = ProfanityChecker.Check(Input.Sentence);
-			return Ok(words);
+			var result = ProfanityChecker.Check(Input.Sentence);
+			return result.Match<IActionResult>(
+				success => Ok (success.ToString()),
+				fail => BadRequest(fail.ToString())
+			);
 		}
 	}
 }
