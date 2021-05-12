@@ -11,12 +11,6 @@ namespace Service.Controllers
 	[Route("api/[controller]")]
 	public class ProfanityCheckerController : ControllerBase
 	{
-		[HttpGet]
-		public int Get()
-		{
-			return 1;
-		}
-
 		[HttpPost]
 		public IActionResult Post(ServiceInput Input)
 		{
