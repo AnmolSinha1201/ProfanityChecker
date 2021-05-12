@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Service
 {
-	public class Successful : BaseResponse
+	public class Success : BaseResponse
 	{ }
 
 	public class Failure : BaseResponse
@@ -34,12 +34,6 @@ namespace Service
 		=> JsonConvert.SerializeObject(this, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 	}
 
-	[StatusText("Success")]
-	public class CheckResultSuccess : BaseResponse
-	{
-		public List<string> WordList = new();
-		public TimeSpan TimeTaken = new();
-	}
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class StatusText : Attribute

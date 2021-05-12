@@ -78,7 +78,7 @@ namespace Service
 			}
 		}
 
-		public static OneOf<Successful, Failure> AddWord(string Word)
+		public static OneOf<Success, Failure> AddWord(string Word)
 		{
 			using (var connection = new NpgsqlConnection(ConnectionString))
 			{
@@ -95,11 +95,11 @@ namespace Service
 					return new Failure() { Description = ex.Message };
 				}
 
-				return new Successful() { Description = "Successfully added the proposed word" };
+				return new Success() { Description = "Successfully added the proposed word" };
 			}
 		}
 
-		public static OneOf<Successful, Failure> RemoveWord(string Word)
+		public static OneOf<Success, Failure> RemoveWord(string Word)
 		{
 			using (var connection = new NpgsqlConnection(ConnectionString))
 			{
@@ -112,7 +112,7 @@ namespace Service
 					return new Failure() { Description = ex.Message };
 				}
 
-				return new Successful() { Description = "Successfully deleted the proposed word" };
+				return new Success() { Description = "Successfully deleted the proposed word" };
 			}
 		}
 	}
