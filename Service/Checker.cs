@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using OneOf;
 
 namespace Service
 {
@@ -66,5 +67,23 @@ namespace Service
 				.Select(kvp => kvp.Key)
 				.ToList()
 		};
+
+		public static OneOf<Successful, Failure> AddWord(string Word)
+		{
+			if (WordDictionary.ContainsKey(Word))
+				return new Failure() { Description = "Word list already has the proposed word" };
+			
+			try
+			{
+				File.AppendAllLines(SourceFile, new [] { Word });
+				WordDictionary.Add(Word, new());
+			}
+			catch(Exception ex)
+			{
+				return new Failure() { Description = ex.Message };
+			}
+
+			return new Successful() { Description = "Successfully added the proposed word" };
+		}
 	}
 }
