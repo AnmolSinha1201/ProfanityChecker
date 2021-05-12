@@ -12,7 +12,7 @@ namespace Service.Controllers
 	public class ProfanityCheckerController : ControllerBase
 	{
 		[HttpPost]
-		public IActionResult Post(ServiceInput Input)
+		public IActionResult Post(InputSentence Input)
 		{
 			var result = ProfanityChecker.Check(Input.Sentence);
 			return result.Match<IActionResult>(
