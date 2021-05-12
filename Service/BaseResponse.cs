@@ -43,12 +43,4 @@ namespace Service
 		public StatusText(string Text)
 		=> this.Text = Text;
 	}
-
-	[StatusText("Success")]
-	public class OverallStatisticSuccess : BaseResponse
-	{
-		public List<ProfaneWord> PopularWords { get; set; } = new();
-		public TimeSpan TotalTime { get; set; }
-		public int TimesCalled { get; set; }
-	}
 }
