@@ -10,6 +10,10 @@ F-Secure Assignment to create a REST API to check profanities in a sentence.
 - While testing on local machine, ensure that service is running and appropriate environment variables are present.
 - General improvent ideas are also present in respecive readmes.
 
+## Improvements
+- A CI/CD pipleine should be set up for deployment, thus automating the entire process.
+- Other improvements are mentioned in their respective READMEs.
+
 ## Deployment details
 The full template is (obtained from AWS template):
 <br />
