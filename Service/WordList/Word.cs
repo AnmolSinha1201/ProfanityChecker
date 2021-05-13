@@ -4,6 +4,6 @@ namespace Service
 {
 	public class InputWord
 	{
-		public string Word { get; set; }
+		public string Word;
 	}
 }

@@ -13,8 +13,8 @@ namespace Service
 	[StatusText("Success")]
 	public class OverallStatisticSuccess : BaseResponse
 	{
-		public List<ProfaneWord> PopularWords { get; set; } = new();
-		public TimeSpan TotalTime { get; set; }
-		public int TimesCalled { get; set; }
+		public List<ProfaneWord> PopularWords = new();
+		public TimeSpan TotalTime;
+		public int TimesCalled;
 	}
 }

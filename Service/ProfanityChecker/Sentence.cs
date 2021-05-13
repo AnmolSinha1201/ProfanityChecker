@@ -6,7 +6,7 @@ namespace Service
 {
 	public class InputSentence
 	{
-		public string Sentence { get; set; }
+		public string Sentence;
 	}
 
 	[StatusText("Success")]
