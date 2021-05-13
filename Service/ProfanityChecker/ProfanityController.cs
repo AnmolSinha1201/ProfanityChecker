@@ -37,7 +37,7 @@ namespace Service.Controllers
 			
 			using(var uploadedFile = File.OpenReadStream())
 			{
-				StreamReader reader = new StreamReader( uploadedFile );
+				StreamReader reader = new StreamReader(uploadedFile);
 				var content = reader.ReadToEnd();
 				return Post(new InputSentence() {Sentence = content });
 			}
