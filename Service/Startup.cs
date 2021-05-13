@@ -40,7 +40,9 @@ namespace Service
             });
 
 			services.AddControllers()
+			.AddNewtonsoftJson()
 			.AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+			
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service", Version = "v1" });
