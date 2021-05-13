@@ -4,7 +4,6 @@ namespace Service
 {
 	public class InputWord
 	{
-		[JsonInclude]
-		public string Word;
+		public string Word { get; set; }
 	}
 }
