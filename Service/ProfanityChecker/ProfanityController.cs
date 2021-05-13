@@ -33,6 +33,9 @@ namespace Service.Controllers
 		[Route("Upload")]
 		public IActionResult Upload(IFormFile File)
 		{
+			if (File == null)
+				return BadRequest(new Failure() { Description = "Failed to upload file" });
+
 			var fileName = System.IO.Path.GetFileName(File.FileName);
 			
 			using(var uploadedFile = File.OpenReadStream())
