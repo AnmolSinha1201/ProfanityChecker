@@ -26,11 +26,11 @@ namespace Test
 			request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
 
 			var response = client.Execute(request);
-			Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
 			var result = JsonConvert.DeserializeObject<CheckResultSuccess>(response.Content);
-			Assert.Equal(result.WordList.Count, 1);
-			Assert.Equal(result.WordList[0], "abuse");
+			Assert.Equal(1, (int)result.WordList.Count);
+			Assert.Equal("abuse", result.WordList[0]);
 		}
 
 		[Fact]
@@ -51,11 +51,11 @@ namespace Test
 			request.AddFile("file", filePath, "text/plain");
 
 			var response = client.Execute(request);
-			Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
 			var result = JsonConvert.DeserializeObject<CheckResultSuccess>(response.Content);
-			Assert.Equal(result.WordList.Count, 1);
-			Assert.Equal(result.WordList[0], "abuse");
+			Assert.Equal(1, (int)result.WordList.Count);
+			Assert.Equal("abuse", result.WordList[0]);
 		}
 
 	}

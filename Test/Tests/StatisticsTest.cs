@@ -23,7 +23,7 @@ namespace Test
 			var request = new RestRequest(Method.GET);
 			var response = client.Execute(request);
 
-			Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 		}
 	}
 }
