@@ -38,9 +38,6 @@ namespace Service
 				__status = value;
 			}
 		}
-
-		public override string ToString()
-		=> JsonConvert.SerializeObject(this, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 	}
 
 

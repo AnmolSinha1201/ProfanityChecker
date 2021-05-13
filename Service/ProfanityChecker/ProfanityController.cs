@@ -21,8 +21,8 @@ namespace Service.Controllers
 		{
 			var result = ProfanityChecker.Check(Input.Sentence);
 			return result.Match<IActionResult>(
-				success => Ok (success.ToString()),
-				fail => BadRequest(fail.ToString())
+				success => Ok (success),
+				fail => BadRequest(fail)
 			);
 		}
 
