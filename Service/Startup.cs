@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using Prometheus;
 
 namespace Service
 {
@@ -62,6 +65,17 @@ namespace Service
 				c.RoutePrefix = string.Empty;
 			});
 
+			var counter = Metrics.CreateCounter("profanity_counter", "Counts requests to the People API endpoints", new CounterConfiguration
+			{
+				LabelNames = new[] { "method", "endpoint" }
+			});
+			app.Use((context, next) =>
+			{
+				counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
+				return next();
+			});
+			app.UseMetricServer();
+			app.UseHttpMetrics();
 
 			app.UseHttpsRedirection();
 
