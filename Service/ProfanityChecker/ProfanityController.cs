@@ -23,11 +23,11 @@ namespace Service.Controllers
 
 		[HttpPost]
 		[Route("Upload")]
-		public IActionResult Upload(IFormFile file)
+		public IActionResult Upload(IFormFile File)
 		{
-			var fileName = System.IO.Path.GetFileName(file.FileName);
+			var fileName = System.IO.Path.GetFileName(File.FileName);
 			
-			using(var uploadedFile = file.OpenReadStream())
+			using(var uploadedFile = File.OpenReadStream())
 			{
 				StreamReader reader = new StreamReader( uploadedFile );
 				var content = reader.ReadToEnd();
