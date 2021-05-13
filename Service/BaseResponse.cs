@@ -14,10 +14,15 @@ namespace Service
 	public abstract class BaseResponse
 	{
 		public string Description;
+
+		private string __status;
 		public string Status
 		{
 			get 
 			{
+				if (__status != default)
+					return __status;
+				
 				var attributes = this.GetType()
 					.GetCustomAttributes(typeof(StatusText), true)
 					.Cast<StatusText>()
@@ -27,6 +32,10 @@ namespace Service
 					return attributes.First().Text;
 
 				return this.GetType().Name;
+			}
+			set
+			{
+				__status = value;
 			}
 		}
 
