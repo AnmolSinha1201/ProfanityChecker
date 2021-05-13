@@ -78,6 +78,10 @@ namespace Service
 
 		public static OneOf<Success, Failure> AddWord(string Word)
 		{
+			if (Word.Split(' ').Length > 1)
+				return new Failure() { Description = "Multiple words entered" };
+			
+			Word = Word.ToLower();
 			try
 			{
 				using (var connection = new NpgsqlConnection(ConnectionString))
@@ -99,6 +103,11 @@ namespace Service
 
 		public static OneOf<Success, Failure> RemoveWord(string Word)
 		{
+			if (Word.Split(' ').Length > 1)
+				return new Failure() { Description = "Multiple words entered" };
+			
+			Word = Word.ToLower();
+			
 			try
 			{
 				using (var connection = new NpgsqlConnection(ConnectionString))
