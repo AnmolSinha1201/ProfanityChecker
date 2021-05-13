@@ -20,5 +20,19 @@ namespace Service.Controllers
 				fail => BadRequest(fail.ToString())
 			);
 		}
+
+		[HttpPost]
+		[Route("Upload")]
+		public IActionResult Upload(IFormFile file)
+		{
+			var fileName = System.IO.Path.GetFileName(file.FileName);
+			
+			using(var uploadedFile = file.OpenReadStream())
+			{
+				StreamReader reader = new StreamReader( uploadedFile );
+				var content = reader.ReadToEnd();
+				return Post(new InputSentence() {Sentence = content });
+			}
+		}
 	}
 }
