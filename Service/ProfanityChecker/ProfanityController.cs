@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,6 +13,9 @@ namespace Service.Controllers
 	[Route("api/[controller]")]
 	public class ProfanityCheckerController : ControllerBase
 	{
+		/// <summary>Scans a sentence and produces a list of profane words among other details</summary>
+		/// <response code="200">Returns a list of profane words</response>
+		/// <response code="400">Returns error message</response> 
 		[HttpPost]
 		public IActionResult Post(InputSentence Input)
 		{
@@ -21,6 +26,9 @@ namespace Service.Controllers
 			);
 		}
 
+		/// <summary>Scans a file and produces a list of profane words among other details</summary>
+		/// <response code="200">Returns a list of profane words</response>
+		/// <response code="400">Returns error message</response> 
 		[HttpPost]
 		[Route("Upload")]
 		public IActionResult Upload(IFormFile File)

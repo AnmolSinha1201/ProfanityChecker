@@ -11,6 +11,9 @@ namespace Service.Controllers
 	[Route("api/[controller]")]
 	public class WordListController : ControllerBase
 	{
+		/// <summary>Adds a word to the wordlist</summary>
+		/// <response code="200">Word added successfully</response>
+		/// <response code="400">Returns error message</response> 
 		[HttpPost]
 		public IActionResult Post(InputWord Input)
 		{
@@ -21,6 +24,10 @@ namespace Service.Controllers
 			);
 		}
 
+		/// <summary>Deletes a word from the wordlist</summary>
+		/// <param name="Input">Word which is proposed to be deleted</param>
+		/// <response code="200">Word deleted successfully. If the word does not exist in wordlist, 200 is returned.</response>
+		/// <response code="400">Returns error message</response> 
 		[HttpDelete("{Input}")]
 		public IActionResult Delete(string Input)
 		{
